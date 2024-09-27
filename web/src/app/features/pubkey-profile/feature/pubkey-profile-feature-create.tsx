@@ -1,14 +1,15 @@
-import { PubKeyIdentityProvider } from '@pubkey-program-library/anchor'
+import { PubKeyIdentityProvider } from '@pubkey-protocol/anchor'
 import { toastError, toastSuccess, UiCard, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUserPlus } from '@tabler/icons-react'
 import { ellipsify } from '../../../ui'
-import { useGetProfileByProviderNullable, useMutationCreateProfile, usePubKeyProfile } from '../data-access'
-import { PubkeyProfileUiCreateForm } from '../ui'
+import { useMutationCreateProfile, useQueryGetProfileByProviderNullable } from '../data-access'
+import { PubkeyProtocolUiProfileCreateForm } from '../ui'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function PubkeyProfileFeatureCreate() {
   const mutation = useMutationCreateProfile()
-  const { authority } = usePubKeyProfile()
-  const pointerQuery = useGetProfileByProviderNullable({
+  const { authority } = usePubKeyProtocol()
+  const pointerQuery = useQueryGetProfileByProviderNullable({
     provider: PubKeyIdentityProvider.Solana,
     providerId: authority.toString(),
   })
@@ -25,7 +26,7 @@ export function PubkeyProfileFeatureCreate() {
         />
       ) : (
         <UiCard title="Create Profile">
-          <PubkeyProfileUiCreateForm
+          <PubkeyProtocolUiProfileCreateForm
             submit={(input) =>
               mutation
                 .mutateAsync(input)

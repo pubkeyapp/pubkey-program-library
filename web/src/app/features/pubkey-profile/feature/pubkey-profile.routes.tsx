@@ -1,27 +1,21 @@
-import { IconBug, IconSearch, IconUserPlus, IconUsersGroup } from '@tabler/icons-react'
+import { IconSearch, IconUser, IconUserPlus } from '@tabler/icons-react'
 import { Navigate, useRoutes } from 'react-router-dom'
 import { KeypairUiGridItem } from '../../keypair/ui'
-import { PubKeyProfileProvider } from '../data-access'
-
-import { PubKeyProfileUiSidebar } from '../ui/pubkey-profile-ui-sidebar'
 
 import { PubkeyProfileFeatureCreate } from './pubkey-profile-feature-create'
-import { PubkeyProfileFeatureDebug } from './pubkey-profile-feature-debug'
 import { PubkeyProfileFeatureDetail } from './pubkey-profile-feature-detail'
 import { PubkeyProfileFeatureList } from './pubkey-profile-feature-list'
 import { PubkeyProfileFeatureSearch } from './pubkey-profile-feature-search'
+import { PubkeyProtocolProvider } from '../../pubkey-protocol'
+import { UiSidebar } from '../../../ui'
+import { SolanaConnectionLoader } from '../../solana'
 
 export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) {
   const sidebar: KeypairUiGridItem[] = [
     {
       label: 'Profiles',
-      path: 'profiles',
-      leftSection: <IconUsersGroup size={16} />,
-    },
-    {
-      label: 'Search',
-      path: 'search',
-      leftSection: <IconSearch size={16} />,
+      path: 'list',
+      leftSection: <IconUser size={16} />,
     },
     {
       label: 'Create',
@@ -29,25 +23,28 @@ export default function PubkeyProfileRoutes({ basePath }: { basePath: string }) 
       leftSection: <IconUserPlus size={16} />,
     },
     {
-      label: 'Debug',
-      path: 'debug',
-      leftSection: <IconBug size={16} />,
+      label: 'Search',
+      path: 'search',
+      leftSection: <IconSearch size={16} />,
     },
   ]
   const routes = useRoutes([
-    { index: true, element: <Navigate to="./profiles" replace /> },
-    { path: 'profiles', element: <PubkeyProfileFeatureList basePath={basePath} /> },
-    { path: ':username', element: <PubkeyProfileFeatureDetail /> },
-    { path: 'search', element: <PubkeyProfileFeatureSearch /> },
+    { index: true, element: <Navigate to="list" replace /> },
+    { path: 'list', element: <PubkeyProfileFeatureList basePath={basePath} /> },
     { path: 'create', element: <PubkeyProfileFeatureCreate /> },
-    { path: 'debug', element: <PubkeyProfileFeatureDebug /> },
+    { path: 'search', element: <PubkeyProfileFeatureSearch /> },
+    { path: ':username', element: <PubkeyProfileFeatureDetail /> },
   ])
 
   return (
-    <PubKeyProfileProvider>
-      <PubKeyProfileUiSidebar basePath={basePath} routes={sidebar}>
-        {routes}
-      </PubKeyProfileUiSidebar>
-    </PubKeyProfileProvider>
+    <SolanaConnectionLoader
+      render={(props) => (
+        <PubkeyProtocolProvider {...props}>
+          <UiSidebar basePath={basePath} routes={sidebar}>
+            {routes}
+          </UiSidebar>
+        </PubkeyProtocolProvider>
+      )}
+    />
   )
 }

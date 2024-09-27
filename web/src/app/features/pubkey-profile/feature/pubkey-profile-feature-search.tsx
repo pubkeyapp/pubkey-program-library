@@ -1,16 +1,15 @@
 import { ActionIcon, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-program-library/anchor'
-import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-program-library/sdk'
+import { PubKeyIdentityProvider, PubKeyProfile } from '@pubkey-protocol/anchor'
+import { GetProfileByProvider, GetProfileByUsername } from '@pubkey-protocol/sdk'
 import { toastError, toastInfo, toastSuccess, UiCard, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
 import { getEnumOptions } from '../../../ui'
-import { usePubKeyProfile } from '../data-access'
-import { PubkeyProfileUiProfile } from '../ui'
+import { PubkeyProtocolUiProfile } from '../ui'
+import { usePubKeyProtocol } from '../../pubkey-protocol'
 
 export function PubkeyProfileFeatureSearch() {
-  const { sdk, program } = usePubKeyProfile()
   return (
     <UiPage leftAction={<IconSearch />} title="Search">
       <UiStack>
@@ -27,7 +26,7 @@ export function PubkeyProfileFeatureSearch() {
 
 function SearchByProvider() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubKeyProfile()
+  const { sdk } = usePubKeyProtocol()
   const form = useForm<GetProfileByProvider>({
     initialValues: {
       provider: PubKeyIdentityProvider.Solana,
@@ -72,7 +71,7 @@ function SearchByProvider() {
 
         {result ? (
           <UiCard>
-            <PubkeyProfileUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} />{' '}
           </UiCard>
         ) : null}
       </UiStack>
@@ -82,7 +81,7 @@ function SearchByProvider() {
 
 function SearchByUsername() {
   const [result, setResult] = useState<PubKeyProfile | null>(null)
-  const { sdk } = usePubKeyProfile()
+  const { sdk } = usePubKeyProtocol()
   const form = useForm<GetProfileByUsername>({ initialValues: { username: '' } })
 
   async function submit({ username }: GetProfileByUsername) {
@@ -118,7 +117,7 @@ function SearchByUsername() {
         />
         {result ? (
           <UiCard>
-            <PubkeyProfileUiProfile profile={result} />{' '}
+            <PubkeyProtocolUiProfile profile={result} />{' '}
           </UiCard>
         ) : null}
       </UiStack>
