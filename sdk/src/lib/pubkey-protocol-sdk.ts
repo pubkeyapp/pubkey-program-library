@@ -21,6 +21,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
+import { slugify } from './utils'
 
 export interface PubKeyProfileSdkOptions {
   readonly connection: Connection
@@ -84,19 +85,25 @@ export interface AddAuthorityOptions {
 }
 
 export interface CreateCommunityOptions {
-  avatarUrl: string
   authority: PublicKey
+  avatarUrl?: string
+  discord?: string
+  farcaster?: string
   feePayer: PublicKey
+  github?: string
   name: string
-  slug: string
+  slug?: string
+  telegram?: string
+  website?: string
+  x?: string
 }
 
 export interface CreateProfileOptions {
-  avatarUrl: string
+  avatarUrl?: string
   authority: PublicKey
   feePayer: PublicKey
   name: string
-  username: string
+  username?: string
 }
 
 export interface UpdateAvatarUrlOptions {
@@ -158,33 +165,36 @@ export class PubkeyProtocolSdk {
     return this.createTransaction({ ix, feePayer })
   }
 
-  async createCommunity({ authority, avatarUrl, feePayer, name, slug }: CreateCommunityOptions) {
+  async createCommunity(options: CreateCommunityOptions) {
+    const slug = options.slug || slugify(options.name)
+    const avatarUrl = options.avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
     const [community] = this.getCommunityPda({ slug })
 
     const ix = await this.program.methods
       .createCommunity({
-        avatarUrl: avatarUrl || `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`,
-        discord: null,
-        farcaster: null,
-        github: null,
-        name,
+        avatarUrl,
+        discord: options.discord ?? null,
+        farcaster: options.farcaster ?? null,
+        github: options.github ?? null,
+        name: options.name,
         slug,
-        telegram: null,
-        website: null,
-        x: null,
+        telegram: options.telegram ?? null,
+        website: options.website ?? null,
+        x: options.x ?? null,
       })
       .accountsStrict({
-        authority,
-        feePayer,
+        authority: options.authority,
+        feePayer: options.feePayer,
         community,
         systemProgram: SystemProgram.programId,
       })
       .instruction()
 
-    return this.createTransaction({ ix, feePayer })
+    return this.createTransaction({ ix, feePayer: options.feePayer })
   }
 
   async createProfile({ authority, avatarUrl, feePayer, name, username }: CreateProfileOptions) {
+    username = username || slugify(name)
     const [profile] = this.getProfilePda({ username })
     const [pointer] = this.getPointerPda({ provider: PubKeyIdentityProvider.Solana, providerId: authority.toString() })
     const ix = await this.program.methods

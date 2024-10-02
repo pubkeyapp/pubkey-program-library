@@ -10,7 +10,7 @@ export function PubkeyCommunityFeatureDetail() {
   const query = useQueryGetCommunityBySlug({ slug })
 
   return (
-    <UiPage leftAction={<IconUsers />} title={slug}>
+    <UiPage leftAction={<IconUsers />} title={query.data?.name ?? slug}>
       {query.isLoading ? (
         <UiLoader />
       ) : query.data ? (

@@ -23,7 +23,6 @@ pub struct CreateCommunity<'info> {
 
     #[account(
       mut,
-      constraint = fee_payer.key().ne(&authority.key()) @ PubkeyProfileError::InvalidFeePayer
     )]
     pub fee_payer: Signer<'info>,
     pub system_program: Program<'info, System>,
