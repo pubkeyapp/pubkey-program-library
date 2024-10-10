@@ -20,10 +20,14 @@ pub enum PubkeyProfileError {
     InvalidDiscordURL,
     #[msg("Invalid Farcaster URL")]
     InvalidFarcasterURL,
-    #[msg("Invalid Telegram URL")]
-    InvalidTelegramURL,
+    #[msg("Invalid Google URL")]
+    InvalidGoogleURL,
     #[msg("Invalid GitHub URL")]
     InvalidGitHubURL,
+    #[msg("Invalid Solana Public Key")]
+    InvalidSolanaPubKey,
+    #[msg("Invalid Telegram URL")]
+    InvalidTelegramURL,
     #[msg("Invalid Website URL")]
     InvalidWebsiteURL,
     #[msg("Invalid Provider ID")]
@@ -44,4 +48,12 @@ pub enum PubkeyProfileError {
     IdentityAlreadyExists,
     #[msg("Identity does not exist")]
     IdentityNonExistent,
+    #[msg("Invalid Identity Profile Authority")]
+    IdentityProfileInvalid,
+    #[msg("Unauthorized community action")]
+    UnauthorizedCommunityAction,
+    #[msg("Community verification already exists")]
+    CommunityVerificationAlreadyExists,
+    #[msg("Account too large")]
+    AccountTooLarge,
 }

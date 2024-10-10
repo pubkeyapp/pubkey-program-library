@@ -10,7 +10,7 @@ pub struct CreateCommunity<'info> {
     #[account(
       init,
       payer = fee_payer,
-      space = Community::size(&[authority.key()], &[Identity { provider: PubKeyIdentityProvider::Solana, provider_id: authority.key().to_string(), name: "Community Creator Wallet".to_owned() }]),
+      space = Community::size(&[authority.key()], &[]),
       seeds = [
         PREFIX,
         COMMUNITY,
@@ -40,19 +40,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         slug,
         name,
         avatar_url,
-        discord,
-        farcaster,
-        github,
-        telegram,
-        website,
-        x,
     } = args;
-
-    let identity = Identity {
-        provider: PubKeyIdentityProvider::Solana,
-        provider_id: authority.key().to_string(),
-        name: "Community Creator Wallet".to_owned(),
-    };
 
     community.set_inner(Community {
         bump: ctx.bumps.community,
@@ -62,13 +50,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
         fee_payers: vec![fee_payer],
         authority,
         pending_authority: None,
-        providers: vec![identity],
-        discord,
-        farcaster,
-        github,
-        telegram,
-        website,
-        x,
+        providers: vec![],
     });
 
     community.validate()?;
@@ -78,13 +60,7 @@ pub fn create_community(ctx: Context<CreateCommunity>, args: CreateCommunityArgs
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateCommunityArgs {
-    pub avatar_url: String,
-    pub discord: Option<String>,
-    pub farcaster: Option<String>,
-    pub github: Option<String>,
-    pub name: String,
     pub slug: String,
-    pub telegram: Option<String>,
-    pub website: Option<String>,
-    pub x: Option<String>,
+    pub avatar_url: String,
+    pub name: String,
 }

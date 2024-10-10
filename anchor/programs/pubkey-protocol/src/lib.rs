@@ -85,4 +85,11 @@ pub mod pubkey_protocol {
     pub fn cancel_update_community_authority(ctx: Context<CancelUpdateAuthority>) -> Result<()> {
         community::cancel_update_authority(ctx)
     }
+
+    pub fn verify_profile_for_community(
+        ctx: Context<VerifyProfileForCommunity>,
+        args: VerifyProfileForCommunityArgs,
+    ) -> Result<()> {
+        community::verify_community_profile(ctx, args)
+    }
 }

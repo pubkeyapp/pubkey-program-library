@@ -398,10 +398,6 @@ export type PubkeyProtocol = {
           }
         },
         {
-          "name": "pointer",
-          "writable": true
-        },
-        {
           "name": "authority",
           "signer": true
         },
@@ -985,6 +981,52 @@ export type PubkeyProtocol = {
           }
         }
       ]
+    },
+    {
+      "name": "verifyProfileForCommunity",
+      "discriminator": [
+        155,
+        142,
+        189,
+        98,
+        130,
+        121,
+        248,
+        118
+      ],
+      "accounts": [
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "profile",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "verifyProfileForCommunityArgs"
+            }
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1076,8 +1118,8 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6009,
-      "name": "invalidTelegramUrl",
-      "msg": "Invalid Telegram URL"
+      "name": "invalidGoogleUrl",
+      "msg": "Invalid Google URL"
     },
     {
       "code": 6010,
@@ -1086,53 +1128,78 @@ export type PubkeyProtocol = {
     },
     {
       "code": 6011,
+      "name": "invalidSolanaPubKey",
+      "msg": "Invalid Solana Public Key"
+    },
+    {
+      "code": 6012,
+      "name": "invalidTelegramUrl",
+      "msg": "Invalid Telegram URL"
+    },
+    {
+      "code": 6013,
       "name": "invalidWebsiteUrl",
       "msg": "Invalid Website URL"
     },
     {
-      "code": 6012,
+      "code": 6014,
       "name": "invalidProviderId",
       "msg": "Invalid Provider ID"
     },
     {
-      "code": 6013,
+      "code": 6015,
       "name": "invalidProviderName",
       "msg": "Invalid Provider Name"
     },
     {
-      "code": 6014,
+      "code": 6016,
       "name": "invalidAccountOwner",
       "msg": "Account not owned by program"
     },
     {
-      "code": 6015,
+      "code": 6017,
       "name": "authorityAlreadyExists",
       "msg": "Authority already exists"
     },
     {
-      "code": 6016,
+      "code": 6018,
       "name": "authorityNonExistent",
       "msg": "Authority does not exist"
     },
     {
-      "code": 6017,
+      "code": 6019,
       "name": "cannotRemoveSoloAuthority",
       "msg": "Cannot remove last remaining authority"
     },
     {
-      "code": 6018,
+      "code": 6020,
       "name": "maxSizeReached",
       "msg": "Array reached max size"
     },
     {
-      "code": 6019,
+      "code": 6021,
       "name": "identityAlreadyExists",
       "msg": "Identity already exists"
     },
     {
-      "code": 6020,
+      "code": 6022,
       "name": "identityNonExistent",
       "msg": "Identity does not exist"
+    },
+    {
+      "code": 6023,
+      "name": "unauthorizedCommunityAction",
+      "msg": "Unauthorized community action"
+    },
+    {
+      "code": 6024,
+      "name": "communityVerificationAlreadyExists",
+      "msg": "Community verification already exists"
+    },
+    {
+      "code": 6025,
+      "name": "accountTooLarge",
+      "msg": "Account too large"
     }
   ],
   "types": [
@@ -1166,7 +1233,7 @@ export type PubkeyProtocol = {
             "type": "string"
           },
           {
-            "name": "nickname",
+            "name": "name",
             "type": "string"
           }
         ]
@@ -1214,45 +1281,9 @@ export type PubkeyProtocol = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "identity"
+                  "name": "pubKeyIdentityProvider"
                 }
               }
-            }
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
-            "type": {
-              "option": "string"
             }
           }
         ]
@@ -1264,52 +1295,16 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "avatarUrl",
-            "type": "string"
-          },
-          {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
             "name": "slug",
             "type": "string"
           },
           {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
+            "name": "avatarUrl",
+            "type": "string"
           },
           {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
-            "type": {
-              "option": "string"
-            }
+            "name": "name",
+            "type": "string"
           }
         ]
       }
@@ -1354,6 +1349,12 @@ export type PubkeyProtocol = {
           {
             "name": "name",
             "type": "string"
+          },
+          {
+            "name": "communities",
+            "type": {
+              "vec": "pubkey"
+            }
           }
         ]
       }
@@ -1467,6 +1468,9 @@ export type PubkeyProtocol = {
           },
           {
             "name": "x"
+          },
+          {
+            "name": "website"
           }
         ]
       }
@@ -1489,6 +1493,14 @@ export type PubkeyProtocol = {
         "kind": "struct",
         "fields": [
           {
+            "name": "provider",
+            "type": {
+              "defined": {
+                "name": "pubKeyIdentityProvider"
+              }
+            }
+          },
+          {
             "name": "providerId",
             "type": "string"
           }
@@ -1507,43 +1519,7 @@ export type PubkeyProtocol = {
             }
           },
           {
-            "name": "discord",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "farcaster",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "github",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
             "name": "name",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "telegram",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "website",
-            "type": {
-              "option": "string"
-            }
-          },
-          {
-            "name": "x",
             "type": {
               "option": "string"
             }
@@ -1584,6 +1560,22 @@ export type PubkeyProtocol = {
             "name": "newAvatarUrl",
             "type": {
               "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "verifyProfileForCommunityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "providerId",
+            "type": {
+              "defined": {
+                "name": "pubKeyIdentityProvider"
+              }
             }
           }
         ]
